@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deaths in Wars by Country and Religion</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-200 flex items-center justify-center min-h-screen p-4 sm:p-8">
+    <div class="bg-white p-6 sm:p-8 rounded-xl shadow-xl w-full max-w-5xl">
+        <h1 class="text-2xl sm:text-3xl font-bold text-center mb-6 text-gray-800">Deaths in Wars and Proxy Wars by Country and Religion</h1>
+        
+        <!-- Year Selection Dropdown -->
+        <div class="mb-4 text-center">
+            <label for="yearSelect" class="font-bold text-gray-700">Select Year:</label>
+            <select id="yearSelect" class="ml-2 p-2 border rounded">
+                <option value="all">All Years</option>
+            </select>
+        </div>
+
+        <div class="relative w-full h-80 sm:h-[500px]">
+            <canvas id="deathChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        // Fetch data from the JSON file
+        fetch('./json/middle_east.json')
+            .then(response => response.json())
+            .then(json => {
+                const yearSelect = document.getElementById('yearSelect');
+
+                // Process religious breakdown to create datasets
+                const religions = {};
+                json.datasets[0].religious_breakdown.forEach((breakdown, countryIndex) => {
+                    Object.entries(breakdown).forEach(([religion, details]) => {
+                        if (!religions[religion]) {
+                            religions[religion] = {
+                                label: religion,
+                                data: Array(json.labels.length).fill(0),
+                                backgroundColor: details.color,
+                                hoverBackgroundColor: details.color
+                            };
+                        }
+                        religions[religion].data[countryIndex] = (json.datasets[0].data[countryIndex] * details.percentage) / 100;
+                    });
+                });
+
+                const data = {
+                    labels: json.labels,
+                    datasets: Object.values(religions)
+                };
+
+                // Chart configuration
+                const ctx = document.getElementById('deathChart').getContext('2d');
+                const chart = new Chart(ctx, {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        plugins: {
+                            title: {
+                                display: true,
+                                text: 'Click a segment to visit the source',
+                                font: { size: 16 },
+                                padding: { top: 10, bottom: 20 }
+                            },
+                            legend: {
+                                position: 'top',
+                                labels: {
+                                    font: { size: 14 },
+                                    boxWidth: 24,
+                                    padding: 15
+                                }
+                            }
+                        },
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                stacked: true,
+                                title: {
+                                    display: true,
+                                    text: 'Country',
+                                    font: { size: 16 },
+                                    padding: { top: 10 }
+                                },
+                                ticks: {
+                                    font: { size: 14 },
+                                    maxRotation: 45,
+                                    minRotation: 0
+                                },
+                                barPercentage: 0.3,
+                                categoryPercentage: 0.8
+                            },
+                            y: {
+                                stacked: true,
+                                title: {
+                                    display: true,
+                                    text: 'Number of Deaths',
+                                    font: { size: 16 },
+                                    padding: { bottom: 10 }
+                                },
+                                ticks: {
+                                    font: { size: 14 },
+                                    callback: value => (value / 1000) + 'K',
+                                    stepSize: 50000
+                                },
+                                grid: {
+                                    borderColor: 'rgba(0, 0, 0, 0.1)'
+                                }
+                            }
+                        },
+                        animation: {
+                            duration: 1000,
+                            easing: 'easeOutQuart'
+                        },
+                        onClick: (event, elements) => {
+                            if (elements.length > 0) {
+                                const element = elements[0];
+                                const datasetIndex = element.datasetIndex;
+                                const index = element.index;
+                                const url = json.datasets[0].sources[index];
+                                if (url) {
+                                    window.open(url, '_blank');
+                                }
+                            }
+                        },
+                        onHover: (event, elements) => {
+                            event.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+                        }
+                    }
+                });
+            })
+            .catch(error => console.error('Error loading JSON:', error));
+    </script>
+</body>
+</html>
