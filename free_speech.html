@@ -477,35 +477,54 @@
             }
         });
 
-        // Dragging functionality
+        // Dragging functionality for both mouse and touch
         let isDragging = false;
         let offsetX, offsetY;
 
-        container.addEventListener('mousedown', (e) => {
+        function startDrag(e) {
             if (e.target.classList.contains('chat-header')) {
                 isDragging = true;
                 const rect = container.getBoundingClientRect();
-                offsetX = e.clientX - rect.left;
-                offsetY = e.clientY - rect.top;
+                if (e.type === 'mousedown') {
+                    offsetX = e.clientX - rect.left;
+                    offsetY = e.clientY - rect.top;
+                } else if (e.type === 'touchstart') {
+                    offsetX = e.touches[0].clientX - rect.left;
+                    offsetY = e.touches[0].clientY - rect.top;
+                }
                 container.style.cursor = 'grabbing';
+                e.preventDefault();
             }
-        });
+        }
 
-        document.addEventListener('mousemove', (e) => {
+        function drag(e) {
             if (isDragging) {
-                const x = e.clientX - offsetX;
-                const y = e.clientY - offsetY;
+                let x, y;
+                if (e.type === 'mousemove') {
+                    x = e.clientX - offsetX;
+                    y = e.clientY - offsetY;
+                } else if (e.type === 'touchmove') {
+                    x = e.touches[0].clientX - offsetX;
+                    y = e.touches[0].clientY - offsetY;
+                }
                 container.style.left = `${x}px`;
                 container.style.top = `${y}px`;
                 container.style.right = 'auto';
                 container.style.bottom = 'auto';
             }
-        });
+        }
 
-        document.addEventListener('mouseup', () => {
+        function endDrag() {
             isDragging = false;
             container.style.cursor = 'default';
-        });
+        }
+
+        container.addEventListener('mousedown', startDrag);
+        container.addEventListener('touchstart', startDrag);
+        document.addEventListener('mousemove', drag);
+        document.addEventListener('touchmove', drag);
+        document.addEventListener('mouseup', endDrag);
+        document.addEventListener('touchend', endDrag);
 
         // Close button functionality
         document.getElementById('close-chat').addEventListener('click', () => {
