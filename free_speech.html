@@ -313,21 +313,29 @@
                     duration: 1000,
                     easing: 'easeOutQuart'
                 },
-                onClick: (event, elements) => {
+                onClick: (event) => {
+                    // Get the nearest element to the click
+                    const elements = chart.getElementsAtEventForMode(event, 'nearest', { intersect: false }, true);
+
                     if (elements.length > 0) {
                         const element = elements[0];
                         const datasetIndex = element.datasetIndex;
-                        const index = element.index;
-                        const year = chart.data.labels[index];
-                        const dataset = chart.data.datasets[datasetIndex];
-                        const value = dataset.data[index];
-                        const country = document.getElementById('countrySelect').value;
-                        const countryName = country.charAt(0).toUpperCase() + country.slice(1).replace('_', ' ');
-                        const metric = dataset.label;
-                        const query = `In ${year}, ${countryName} had a ${metric} of ${metric === 'Freedom Score' ? value + '%' : value.toFixed(3)}. Provide context.`;
+                        const dataIndex = element.index;
+
+                        // Get the x and y values of the nearest point
+                        const xValue = chart.data.labels[dataIndex];
+                        const yValue = chart.data.datasets[datasetIndex].data[dataIndex];
+                        const datasetLabel = chart.data.datasets[datasetIndex].label;
+
+                        // Construct the query
+                        const query = `You clicked near the ${datasetLabel} dataset. The x-value is ${xValue}, and the y-value is ${yValue}. Provide insights on this data point.`;
                         console.log('Sending query:', query);
+
+                        // Open the chat and send the query
                         document.getElementById('chatContainer').style.display = 'block';
                         sendGraphQuery(query);
+                    } else {
+                        console.log('No point found near the click.');
                     }
                 },
                 onHover: (event, elements) => {
