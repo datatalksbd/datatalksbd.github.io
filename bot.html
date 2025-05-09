@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Copilot</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f6f8;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      max-width: 600px;
+      margin: auto;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .messages {
+      flex: 1;
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      overflow-y: auto;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+      margin-bottom: 10px;
+    }
+
+    .message {
+      margin: 10px 0;
+      max-width: 80%;
+      line-height: 1.5;
+      padding: 10px 14px;
+      border-radius: 12px;
+    }
+
+    .user {
+      background-color: #d0e7ff;
+      align-self: flex-end;
+      border-bottom-right-radius: 0;
+    }
+
+    .bot {
+      background-color: #e2e2e2;
+      align-self: flex-start;
+      border-bottom-left-radius: 0;
+    }
+
+    .input-area {
+      display: flex;
+      gap: 10px;
+    }
+
+    textarea {
+      flex: 1;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      resize: none;
+      height: 60px;
+      font-size: 14px;
+    }
+
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .loading {
+      font-style: italic;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+  <div class="chat-container">
+    <div class="messages" id="messages"></div>
+
+    <div class="input-area">
+      <textarea id="userInput" placeholder="Ask me anything..."></textarea>
+      <button onclick="sendRequest()">Send</button>
+    </div>
+  </div>
+
+  <script>
+    function addMessage(text, sender) {
+      const msgEl = document.createElement('div');
+      msgEl.className = 'message ' + sender;
+      msgEl.textContent = text;
+      document.getElementById('messages').appendChild(msgEl);
+      msgEl.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function sendRequest() {
+      const input = document.getElementById('userInput');
+      const userText = input.value.trim();
+      if (!userText) return;
+
+      addMessage(userText, 'user');
+      input.value = '';
+
+      const loadingEl = document.createElement('div');
+      loadingEl.className = 'message bot loading';
+      loadingEl.textContent = 'Typing...';
+      document.getElementById('messages').appendChild(loadingEl);
+      loadingEl.scrollIntoView({ behavior: 'smooth' });
+
+      fetch('https://ai-api-al6k.onrender.com/ask', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text: userText })
+      })
+      .then(response => response.json())
+      .then(data => {
+        document.getElementById('messages').removeChild(loadingEl);
+
+        const fullText = (data.responses || [])
+          .filter(entry => entry.event === "appendText" && entry.text)
+          .map(entry => entry.text)
+          .join('');
+
+        addMessage(fullText || '[No response]', 'bot');
+      })
+      .catch(error => {
+        document.getElementById('messages').removeChild(loadingEl);
+        addMessage('Error: ' + error.message, 'bot');
+      });
+    }
+  </script>
+</body>
+</html>

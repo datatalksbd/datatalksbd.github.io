@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Development and Free Speech in Muslim Empire Countries (1990–2022)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-4 sm:p-8">
+    <div class="bg-white p-6 sm:p-8 rounded-xl shadow-xl w-full max-w-5xl">
+        <h1 class="text-2xl sm:text-3xl font-bold text-center mb-6 text-gray-800">Social Development and Free Speech in Muslim Empire Countries (1990–2022)</h1>
+        <div class="mb-4">
+            <label for="countrySelect" class="text-lg font-medium text-gray-700">Select Country:</label>
+            <select id="countrySelect" class="ml-2 p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="saudi_arabia">Saudi Arabia</option>
+                <option value="turkey">Turkey</option>
+                <option value="iraq">Iraq</option>
+                <option value="india">India</option>
+            </select>
+        </div>
+        <div class="relative w-full h-80 sm:h-[500px]">
+            <canvas id="developmentChart"></canvas>
+        </div>
+        <div id="error" class="text-red-500 text-center mt-4"></div>
+        <div class="mt-8">
+            <h2 class="text-xl sm:text-2xl font-semibold mb-4 text-gray-800">Understanding the Metrics</h2>
+            <div class="space-y-4">
+                <div>
+                    <h3 class="text-lg font-medium text-blue-600">Freedom Score (Blue Line)</h3>
+                    <p class="text-gray-600">Measures political rights and civil liberties, including free speech, on a 0–100 scale (higher is freer), from Freedom House’s Freedom in the World report. High free speech enables open discourse, fostering development through innovation and participation. Low scores, as in authoritarian regimes, may limit development unless offset by economic factors.</p>
+                </div>
+                <div>
+                    <h3 class="text-lg font-medium text-red-600">Human Development Index (HDI, Red Line)</h3>
+                    <p class="text-gray-600">A 0–1 scale measuring health (life expectancy), education (schooling years), and income (GNI per capita), from UNDP’s Human Development Reports. Higher HDI reflects better social development. Free speech often correlates with HDI by supporting education and innovation, though resources can drive HDI without freedom.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Responsive font size based on screen width
+        const getFontSize = () => {
+            const width = window.innerWidth;
+            if (width < 640) return 12; // Mobile
+            if (width < 1024) return 14; // Tablet
+            return 16; // Desktop
+        };
+
+        // Initialize chart with empty data
+        const ctx = document.getElementById('developmentChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: [],
+                datasets: []
+            },
+            options: {
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Click a point to visit the source (modern data only)',
+                        font: { size: getFontSize() + 4 },
+                        padding: { top: 10, bottom: 20 }
+                    },
+                    legend: {
+                        position: window.innerWidth < 640 ? 'bottom' : 'top',
+                        labels: {
+                            font: { size: getFontSize() },
+                            boxWidth: 24,
+                            padding: 15
+                        }
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: context => {
+                                const label = context.dataset.label;
+                                const value = context.parsed.y;
+                                return `${label}: ${label === 'Freedom Score' ? value + '%' : value.toFixed(3)}`;
+                            }
+                        }
+                    }
+                },
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Year',
+                            font: { size: getFontSize() + 4 },
+                            padding: { top: 10 }
+                        },
+                        ticks: {
+                            font: { size: getFontSize() }
+                        }
+                    },
+                    y: {
+                        min: 0,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Freedom Score (%)',
+                            font: { size: getFontSize() + 4 },
+                            padding: { bottom: 10 }
+                        },
+                        ticks: {
+                            font: { size: getFontSize() },
+                            stepSize: 20,
+                            callback: value => `${value}%`
+                        },
+                        grid: { borderColor: 'rgba(0, 0, 0, 0.1)' }
+                    },
+                    y1: {
+                        min: 0,
+                        max: 1,
+                        position: 'right',
+                        title: {
+                            display: true,
+                            text: 'HDI (0–1)',
+                            font: { size: getFontSize() + 4 },
+                            padding: { bottom: 10 }
+                        },
+                        ticks: {
+                            font: { size: getFontSize() },
+                            stepSize: 0.2,
+                            callback: value => value.toFixed(1)
+                        },
+                        grid: { drawOnChartArea: false }
+                    }
+                },
+                animation: {
+                    duration: 1000,
+                    easing: 'easeOutQuart'
+                },
+                onClick: (event, elements) => {
+                    if (elements.length > 0) {
+                        const element = elements[0];
+                        const datasetIndex = element.datasetIndex;
+                        const index = element.index;
+                        const url = chart.data.datasets[datasetIndex].sources[index];
+                        if (url) window.open(url, '_blank');
+                    }
+                },
+                onHover: (event, elements) => {
+                    event.native.target.style.cursor = elements.length ? 'pointer' : 'default';
+                }
+            }
+        });
+
+        // Load JSON data and initialize chart
+        fetch('json/muslim_empire.json')
+            .then(response => {
+                if (!response.ok) throw new Error(`Failed to fetch JSON: ${response.status} ${response.statusText}`);
+                return response.json();
+            })
+            .then(data => {
+                if (data.countries) {
+                    document.getElementById('error').textContent = '';
+                    updateChart('saudi_arabia', data.countries);
+                    document.getElementById('countrySelect').addEventListener('change', (e) => {
+                        updateChart(e.target.value, data.countries);
+                    });
+                } else {
+                    throw new Error('Invalid JSON structure: missing "countries" key');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching JSON:', error);
+                document.getElementById('error').textContent = `Failed to load data: ${error.message}. Please ensure json/muslim_empire.json exists in the json folder, is valid JSON, and contains a "countries" key.`;
+            });
+
+        // Update chart based on selected country
+        function updateChart(country, countries) {
+            if (countries[country]) {
+                chart.data = countries[country];
+                chart.options.plugins.title.text = `Click a point to visit the source (modern data only) - ${country.charAt(0).toUpperCase() + country.slice(1).replace('_', ' ')}`;
+                chart.update();
+            } else {
+                document.getElementById('error').textContent = `No data available for ${country}.`;
+            }
+        }
+
+        // Update font sizes and legend position on window resize
+        window.addEventListener('resize', () => {
+            chart.options.plugins.title.font.size = getFontSize() + 4;
+            chart.options.plugins.legend.labels.font.size = getFontSize();
+            chart.options.plugins.legend.position = window.innerWidth < 640 ? 'bottom' : 'top';
+            chart.options.scales.x.title.font.size = getFontSize() + 4;
+            chart.options.scales.x.ticks.font.size = getFontSize();
+            chart.options.scales.y.title.font.size = getFontSize() + 4;
+            chart.options.scales.y.ticks.font.size = getFontSize();
+            chart.options.scales.y1.title.font.size = getFontSize() + 4;
+            chart.options.scales.y1.ticks.font.size = getFontSize();
+            chart.update();
+        });
+    </script>
+</body>
+</html>

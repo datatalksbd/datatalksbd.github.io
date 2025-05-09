@@ -1,0 +1,168 @@
+{
+    "countries": {
+      "saudi_arabia": {
+        "labels": [900, 1200, 1500, 1800, 1900, 2000, 2020, 2025],
+        "datasets": [
+          {
+            "label": "Freedom Score",
+            "data": [40, 20, 15, 10, 10, 10, 7, 8],
+            "borderColor": "rgba(54, 162, 235, 0.8)",
+            "backgroundColor": "rgba(54, 162, 235, 0.2)",
+            "fill": false,
+            "yAxisID": "y",
+            "sources": [
+              "https://en.wikipedia.org/wiki/Islamic_Golden_Age",
+              "https://en.wikipedia.org/wiki/Mongol_invasions_and_conquests",
+              "https://www.britannica.com/topic/Ottoman-Empire",
+              "https://www.britannica.com/topic/colonialism",
+              "https://www.britannica.com/place/Saudi-Arabia",
+              "https://freedomhouse.org/report/freedom-world/2000/saudi-arabia",
+              "https://freedomhouse.org/report/freedom-world/2020/saudi-arabia",
+              "https://freedomhouse.org/report/freedom-world"
+            ]
+          },
+          {
+            "label": "HDI",
+            "data": [0.500, 0.400, 0.350, 0.300, 0.320, 0.746, 0.861, 0.880],
+            "borderColor": "rgba(255, 99, 132, 0.8)",
+            "backgroundColor": "rgba(255, 99, 132, 0.2)",
+            "fill": false,
+            "yAxisID": "y1",
+            "sources": [
+              "https://en.wikipedia.org/wiki/Islamic_Golden_Age",
+              "https://en.wikipedia.org/wiki/Mongol_invasions_and_conquests",
+              "https://www.britannica.com/topic/Ottoman-Empire",
+              "https://www.britannica.com/topic/colonialism",
+              "https://www.britannica.com/place/Saudi-Arabia",
+              "https://hdr.undp.org/data-center/human-development-index",
+              "https://hdr.undp.org/data-center/human-development-index",
+              "https://hdr.undp.org/data-center/human-development-index"
+            ]
+          }
+        ]
+      },
+      "turkey": {
+        "labels": [900, 1200, 1500, 1800, 1900, 2000, 2020, 2025],
+        "datasets": [
+          {
+            "label": "Freedom Score",
+            "data": [45, 25, 20, 15, 30, 46, 32, 33],
+            "borderColor": "rgba(54, 162, 235, 0.8)",
+            "backgroundColor": "rgba(54, 162, 235, 0.2)",
+            "fill": false,
+            "yAxisID": "y",
+            "sources": [
+              "https://en.wikipedia.org/wiki/Islamic_Golden_Age",
+              "https://www.britannica.com/topic/Seljuq",
+              "https://www.britannica.com/topic/Ottoman-Empire",
+              "https://en.wikipedia.org/wiki/Ottoman_decline_thesis",
+              "https://en.wikipedia.org/wiki/Young_Turks",
+              "https://freedomhouse.org/report/freedom-world/2000/turkey",
+              "https://freedomhouse.org/report/freedom-world/2020/turkey",
+              "https://freedomhouse.org/report/freedom-world"
+            ]
+          },
+          {
+            "label": "HDI",
+            "data": [0.550, 0.450, 0.400, 0.350, 0.400, 0.669, 0.835, 0.860],
+            "borderColor": "rgba(255, 99, 132, 0.8)",
+            "backgroundColor": "rgba(255, 99, 132, 0.2)",
+            "fill": false,
+            "yAxisID": "y1",
+            "sources": [
+              "https://en.wikipedia.org/wiki/Islamic_Golden_Age",
+              "https://www.britannica.com/topic/Seljuq",
+              "https://www.britannica.com/topic/Ottoman-Empire",
+              "https://en.wikipedia.org/wiki/Ottoman_decline_thesis",
+              "https://en.wikipedia.org/wiki/Young_Turks",
+              "https://hdr.undp.org/data-center/human-development-index",
+              "https://hdr.undp.org/data-center/human-development-index",
+              "https://hdr.undp.org/data-center/human-development-index"
+            ]
+          }
+        ]
+      },
+      "iraq": {
+        "labels": [900, 1200, 1500, 1800, 1900, 2000, 2020, 2025],
+        "datasets": [
+          {
+            "label": "Freedom Score",
+            "data": [50, 15, 20, 15, 15, 10, 29, 31],
+            "borderColor": "rgba(54, 162, 235, 0.8)",
+            "backgroundColor": "rgba(54, 162, 235, 0.2)",
+            "fill": false,
+            "yAxisID": "y",
+            "sources": [
+              "https://en.wikipedia.org/wiki/Islamic_Golden_Age",
+              "https://en.wikipedia.org/wiki/Mongol_invasions_and_conquests",
+              "https://www.britannica.com/topic/Ottoman-Empire",
+              "https://www.britannica.com/topic/colonialism",
+              "https://www.britannica.com/place/Iraq",
+              "https://freedomhouse.org/report/freedom-world/2000/iraq",
+              "https://freedomhouse.org/report/freedom-world/2020/iraq",
+              "https://freedomhouse.org/report/freedom-world"
+            ]
+          },
+          {
+            "label": "HDI",
+            "data": [0.600, 0.350, 0.350, 0.300, 0.320, 0.583, 0.661, 0.680],
+            "borderColor": "rgba(255, 99, 132, 0.8)",
+            "backgroundColor": "rgba(255, 99, 132, 0.2)",
+            "fill": false,
+            "yAxisID": "y1",
+            "sources": [
+              "https://en.wikipedia.org/wiki/Islamic_Golden_Age",
+              "https://en.wikipedia.org/wiki/Mongol_invasions_and_conquests",
+              "https://www.britannica.com/topic/Ottoman-Empire",
+              "https://www.britannica.com/topic/colonialism",
+              "https://www.britannica.com/place/Iraq",
+              "https://hdr.undp.org/data-center/human-development-index",
+              "https://hdr.undp.org/data-center/human-development-index",
+              "https://hdr.undp.org/data-center/human-development-index"
+            ]
+          }
+        ]
+      },
+      "india": {
+        "labels": [900, 1200, 1500, 1800, 1900, 2000, 2020, 2025],
+        "datasets": [
+          {
+            "label": "Freedom Score",
+            "data": [30, 25, 20, 15, 20, 77, 67, 65],
+            "borderColor": "rgba(54, 162, 235, 0.8)",
+            "backgroundColor": "rgba(54, 162, 235, 0.2)",
+            "fill": false,
+            "yAxisID": "y",
+            "sources": [
+              "https://en.wikipedia.org/wiki/Islamic_Golden_Age",
+              "https://en.wikipedia.org/wiki/Delhi_Sultanate",
+              "https://www.britannica.com/topic/Mughal-dynasty",
+              "https://www.britannica.com/topic/colonialism",
+              "https://www.britannica.com/place/India",
+              "https://freedomhouse.org/report/freedom-world/2000/india",
+              "https://freedomhouse.org/report/freedom-world/2020/india",
+              "https://freedomhouse.org/report/freedom-world"
+            ]
+          },
+          {
+            "label": "HDI",
+            "data": [0.450, 0.400, 0.400, 0.350, 0.300, 0.49, 0.638, 0.650],
+            "borderColor": "rgba(255, 99, 132, 0.8)",
+            "backgroundColor": "rgba(255, 99, 132, 0.2)",
+            "fill": false,
+            "yAxisID": "y1",
+            "sources": [
+              "https://en.wikipedia.org/wiki/Islamic_Golden_Age",
+              "https://en.wikipedia.org/wiki/Delhi_Sultanate",
+              "https://www.britannica.com/topic/Mughal-dynasty",
+              "https://www.britannica.com/topic/colonialism",
+              "https://www.britannica.com/place/India",
+              "https://hdr.undp.org/data-center/human-development-index",
+              "https://hdr.undp.org/data-center/human-development-index",
+              "https://hdr.undp.org/data-center/human-development-index"
+            ]
+          }
+        ]
+      }
+    }
+  }
