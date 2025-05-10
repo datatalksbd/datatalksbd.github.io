@@ -194,27 +194,31 @@
   </footer>
 
   <script>
-    // Visualization metadata
-    const visualizations = [
-      {
-        title: 'Deaths in Wars by Country and Religion',
-        description: 'Stacked bar chart showing deaths caused by Saudi Arabia, Iran, and Israel, segmented by religion (Sunni, Shia, Christian, Other). Click segments to visit sources.',
-        tags: ['war', 'casualties', 'religion', 'Saudi Arabia', 'Iran', 'Israel'],
-        url: 'middle_east_war.html',
-        image: 'https://i.insider.com/5cacc64e2730ca67360d1c3d?width=700'
-      },
-      {
-        title: 'Major Wars (1914–Present)',
-        description: 'Explore the causes, key events, and outcomes of major wars from World War I to modern conflicts.',
-        tags: ['war', 'conflicts', 'deatg', 'global'],
-        url: 'war_and_deaths.html',
-        image: 'https://imgs.search.brave.com/8w0Oud1SfE5B_qxAzjKURUcNweMokS1Aex-d88IGax8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA1LzYyLzA5LzU5/LzM2MF9GXzU2MjA5/NTkwNF96eEhqZEZO/bnZwam84YTRkV2tk/RHVaMHZVa04wV05F/NC5qcGc'
+    // Fetch visualization data dynamically
+    async function fetchVisualizations() {
+      try {
+        const response = await fetch('./visualizations.json'); // Adjust the path if needed
+        if (!response.ok) throw new Error('Failed to load visualizations');
+        const data = await response.json();
+
+        // Get the last 10 visualizations
+        const topVisualizations = data.slice(-10).reverse(); // Reverse to show the latest first
+        renderCards(topVisualizations);
+      } catch (error) {
+        console.error('Error fetching visualizations:', error);
+        document.getElementById('vizGrid').innerHTML = `
+          <div class="col-span-1 sm:col-span-2 lg:col-span-3 text-center py-16">
+            <i class="bi bi-exclamation-circle text-5xl text-red-500 mb-4"></i>
+            <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300">Failed to load visualizations</h3>
+            <p class="text-gray-500 dark:text-gray-400 mt-2">${error.message}</p>
+          </div>
+        `;
       }
-    ];
+    }
 
     // Render visualization cards
-    const vizGrid = document.getElementById('vizGrid');
     function renderCards(vizs) {
+      const vizGrid = document.getElementById('vizGrid');
       vizGrid.innerHTML = '';
 
       if (vizs.length === 0) {
@@ -232,50 +236,44 @@
         const card = document.createElement('div');
         card.className = 'bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden transform hover:-translate-y-1';
 
-        // Use the provided image or a placeholder
         const imageUrl = viz.image || `https://placehold.co/600x400/3b82f6/ffffff?text=${encodeURIComponent(viz.title)}`;
 
         card.innerHTML = `
-        <div class="flex flex-col h-full bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow">
-
-          <div class="relative h-48 overflow-hidden">
-            <img 
-              src="${imageUrl}" 
-              alt="${viz.title}" 
-              class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-              onerror="this.onerror=null; this.src='https://placehold.co/600x400/3b82f6/ffffff?text=${encodeURIComponent(viz.title)}';"
-              crossorigin="anonymous"
-            />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-          </div>
-
-          <div class="flex flex-col flex-grow p-5">
-            <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">${viz.title}</h2>
-            <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3 flex-grow">${viz.description}</p>
-            
-            <div class="flex flex-wrap gap-2 mb-4">
-              ${viz.tags.map(tag => `
-                <span class="px-2 py-1 text-xs rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">
-                  ${tag}
-                </span>
-              `).join('')}
+          <div class="flex flex-col h-full bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow">
+            <div class="relative h-48 overflow-hidden">
+              <img 
+                src="${imageUrl}" 
+                alt="${viz.title}" 
+                class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                onerror="this.onerror=null; this.src='https://placehold.co/600x400/3b82f6/ffffff?text=${encodeURIComponent(viz.title)}';"
+                crossorigin="anonymous"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
             </div>
-
-            <div class="mt-auto">
-              <a href="${viz.url}" class="inline-flex items-center w-full justify-center px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors">
-                <i class="bi bi-bar-chart-line mr-2"></i>View Visualization
-              </a>
+            <div class="flex flex-col flex-grow p-5">
+              <h2 class="text-xl font-semibold text-gray-800 dark:text-white mb-2">${viz.title}</h2>
+              <p class="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3 flex-grow">${viz.description}</p>
+              <div class="flex flex-wrap gap-2 mb-4">
+                ${viz.tags.map(tag => `
+                  <span class="px-2 py-1 text-xs rounded-full bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300">
+                    ${tag}
+                  </span>
+                `).join('')}
+              </div>
+              <div class="mt-auto">
+                <a href="${viz.url}" class="inline-flex items-center w-full justify-center px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-lg transition-colors">
+                  <i class="bi bi-bar-chart-line mr-2"></i>View Visualization
+                </a>
+              </div>
             </div>
           </div>
-
-        </div>
-      `;
+        `;
         vizGrid.appendChild(card);
       });
     }
 
-    // Initial render
-    renderCards(visualizations);
+    // Fetch and render visualizations on page load
+    fetchVisualizations();
 
     // Search functionality
     const searchInput = document.getElementById('searchInput');

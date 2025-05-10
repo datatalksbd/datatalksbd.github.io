@@ -1,0 +1,25 @@
+[
+  {
+    "title": "Deaths in Wars by Country and Religion",
+    "description": "Stacked bar chart showing deaths caused by Saudi Arabia, Iran, and Israel, segmented by religion (Sunni, Shia, Christian, Other). Click segments to visit sources.",
+    "tags": ["war", "casualties", "religion", "Saudi Arabia", "Iran", "Israel"],
+    "url": "middle_east_war.html",
+    "image": "https://i.insider.com/5cacc64e2730ca67360d1c3d?width=700"
+  },
+  {
+    "title": "Major Wars (1914–Present)",
+    "description": "Explore the causes, key events, and outcomes of major wars from World War I to modern conflicts.",
+    "tags": ["war", "conflicts", "death", "global"],
+    "url": "war_and_deaths.html",
+    "image": "https://imgs.search.brave.com/8w0Oud1SfE5B_qxAzjKURUcNweMokS1Aex-d88IGax8/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzA1LzYyLzA5LzU5/LzM2MF9GXzU2MjA5/NTkwNF96eEhqZEZO/bnZwam84YTRkV2tk/RHVaMHZVa04wV05F/NC5qcGc"
+  },
+ 
+  {
+    "title": "Free Speech and Development",
+    "description": "Explore the relationship between free speech and development across different countries.",
+    "tags": ["free speech", "development", "muslim"],
+    "url": "free_speech.html",
+    "image": "https://news.cornell.edu/sites/default/files/styles/story_thumbnail_xlarge/public/2018-05/0502_free_speech.jpg"
+  }
+  
+]
